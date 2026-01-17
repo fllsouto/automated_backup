@@ -19,6 +19,7 @@ public class MainView : Window
     private readonly Label _summaryLabel;
     private readonly Button _scanButton;
     private readonly Button _demoButton;
+    private readonly Button _hardwareButton;
 
     // Animation components
     private readonly FrameView _scanProgressFrame;
@@ -40,15 +41,22 @@ public class MainView : Window
         {
             X = 0,
             Y = Pos.AnchorEnd(1),
-            Width = Dim.Fill() - 30
+            Width = Dim.Fill() - 45
         };
 
         _scanButton = new Button("_Scan (F5)")
         {
-            X = Pos.AnchorEnd(28),
+            X = Pos.AnchorEnd(43),
             Y = Pos.AnchorEnd(1)
         };
         _scanButton.Clicked += OnScanClicked;
+
+        _hardwareButton = new Button("_Hardware")
+        {
+            X = Pos.AnchorEnd(27),
+            Y = Pos.AnchorEnd(1)
+        };
+        _hardwareButton.Clicked += OnHardwareClicked;
 
         _demoButton = new Button("_Demo")
         {
@@ -58,7 +66,7 @@ public class MainView : Window
         _demoButton.Clicked += OnDemoClicked;
 
         // === Summary line (above status bar) ===
-        _summaryLabel = new Label("Press 'Scan' to analyze your filesystem (F5) | 'Demo' for animation demo")
+        _summaryLabel = new Label("Scan (F5): Filesystem | Hardware (H): PC Specs | Demo: Animations")
         {
             X = 0,
             Y = Pos.AnchorEnd(2),
@@ -138,7 +146,7 @@ public class MainView : Window
         _rightFrame.Add(_insightsListView);
 
         // === Add all components (order matters for z-index) ===
-        Add(_leftFrame, _rightFrame, _scanProgressFrame, _summaryLabel, _statusLabel, _scanButton, _demoButton);
+        Add(_leftFrame, _rightFrame, _scanProgressFrame, _summaryLabel, _statusLabel, _scanButton, _hardwareButton, _demoButton);
 
         // === Keyboard shortcuts ===
         KeyPress += (e) =>
@@ -148,7 +156,18 @@ public class MainView : Window
                 OnScanClicked();
                 e.Handled = true;
             }
+            else if (e.KeyEvent.Key == Key.H || e.KeyEvent.Key == (Key.H | Key.ShiftMask))
+            {
+                OnHardwareClicked();
+                e.Handled = true;
+            }
         };
+    }
+
+    private void OnHardwareClicked()
+    {
+        using var hardwareView = new HardwareSpecsView();
+        Application.Run(hardwareView);
     }
 
     private void OnDemoClicked()

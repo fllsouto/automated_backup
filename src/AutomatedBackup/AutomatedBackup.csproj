@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Terminal.Gui" Version="1.19.0" />
+    <PackageReference Include="System.Management" Version="9.0.4" />
   </ItemGroup>
 
 </Project>
